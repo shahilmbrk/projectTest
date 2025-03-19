@@ -6,6 +6,9 @@ from flask import jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+import hmac
+import hashlib
+import time
 import os
 
 load_dotenv()  # Load environment variables from .env file
@@ -626,6 +629,39 @@ def get_messages(user_id):
     } for msg in messages]
 
     return jsonify(messages_data)
+
+# Route for staff to host a video conference
+@app.route('/staff/video_conference')
+@login_required
+def staff_video_conference():
+    return render_template('staff_video_conference.html')
+
+# Route for students to join a video conference
+@app.route('/student/video_conference')
+@login_required
+def student_video_conference():
+    return render_template('student_video_conference.html')
+
+@app.route('/generate_token')
+def generate_token():
+    appID = request.args.get('appID')
+    serverSecret = request.args.get('serverSecret')
+    roomID = request.args.get('roomID')
+
+    # Generate token
+    effective_time_in_seconds = 3600  # Token valid for 1 hour
+    expiration_time = int(time.time()) + effective_time_in_seconds
+
+    token = hmac.new(
+        serverSecret.encode('utf-8'),
+        f"{appID}{roomID}{expiration_time}".encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    return jsonify({
+        'token': token,
+        'expiration_time': expiration_time
+    })
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))  # Use PORT if provided, otherwise default to 10000

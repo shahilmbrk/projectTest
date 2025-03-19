@@ -13,6 +13,8 @@
             <a href="{{ url_for('student_communication') }}" class="nav-button">Communication</a>
             <a href="{{ url_for('announcement') }}" class="nav-button">Announcements</a>
             <a href="{{ url_for('help_support') }}" class="nav-button">Help & Support</a>
+            <!-- Add Video Conference Link -->
+            <a href="{{ url_for('student_video_conference') }}" class="nav-button">Video Conference</a>
             <a href="{{ url_for('logout') }}" class="nav-button logout">Logout</a>
         </div>
     </div>
@@ -35,11 +37,16 @@
     </div>
 </div>
 
+<!-- Include ZEGOCLOUD SDK -->
+<script src="https://zegocloud.github.io/zego_uikit_prebuilt_web/zego_uikit_prebuilt.min.js"></script>
+
+<!-- Inline JavaScript for Communication -->
 <script>
+    // Function to load chat messages
     function loadChat() {
         const chatBox = document.getElementById('chat-box');
-        const currentUserId = parseInt(chatBox.getAttribute('data-user-id')); // Get current user ID
-        const staffId = parseInt(chatBox.getAttribute('data-staff-id')); // Get assigned staff ID
+        const currentUserId = parseInt(chatBox.getAttribute('data-user-id'));
+        const staffId = parseInt(chatBox.getAttribute('data-staff-id'));
 
         // Fetch messages between the student and assigned staff
         fetch(`/get_messages/${staffId}`)
@@ -55,9 +62,10 @@
             });
     }
 
+    // Function to send a message
     function sendMessage() {
         const chatBox = document.getElementById('chat-box');
-        const staffId = parseInt(chatBox.getAttribute('data-staff-id')); // Get assigned staff ID
+        const staffId = parseInt(chatBox.getAttribute('data-staff-id'));
         const message = document.getElementById('message').value;
 
         if (!message) {

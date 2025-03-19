@@ -11,6 +11,8 @@
             <a href="{{ url_for('staff_communication') }}" class="nav-button">Communication</a>
             <a href="{{ url_for('staff_project_proposals') }}" class="nav-button">Project Proposals</a>
             <a href="{{ url_for('staff_manage') }}" class="nav-button">Manage</a>
+            <!-- Add Video Conference Link -->
+            <a href="{{ url_for('staff_video_conference') }}" class="nav-button">Video Conference</a>
             <a href="{{ url_for('logout') }}" class="nav-button logout">Logout</a>
         </div>
     </div>
@@ -44,10 +46,15 @@
     </div>
 </div>
 
+<!-- Include ZEGOCLOUD SDK -->
+<script src="https://zegocloud.github.io/zego_uikit_prebuilt_web/zego_uikit_prebuilt.min.js"></script>
+
+<!-- Inline JavaScript for Communication -->
 <script>
+    // Function to load chat messages
     function loadChat(studentId) {
         const chatBox = document.getElementById('chat-box');
-        const currentUserId = parseInt(chatBox.getAttribute('data-user-id')); // Get current user ID
+        const currentUserId = parseInt(chatBox.getAttribute('data-user-id'));
 
         if (!studentId) {
             chatBox.innerHTML = '<p>Please select a student to start chatting.</p>';
@@ -68,6 +75,7 @@
             });
     }
 
+    // Function to send a message
     function sendMessage() {
         const studentId = document.getElementById('student').value;
         const message = document.getElementById('message').value;
