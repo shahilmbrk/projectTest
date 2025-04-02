@@ -26,8 +26,11 @@
                     <th>Class</th>
                     <th>Abstract</th>
                     <th>Group No</th>
+                    <th>Staff Name</th>
                     <th>Upload Date</th>
-                    <th>Status</th>
+                    <th>Staff Status</th>
+                    <th>Coordinator Status</th>
+                    <th>Actions</th>
                     <th>Open File</th>
                 </tr>
             </thead>
@@ -39,17 +42,22 @@
                     <td>{{ doc.class_name }}</td>
                     <td>{{ doc.abstract }}</td>
                     <td>{{ doc.group_no }}</td>
+                    <td>{{ doc.staff_name }}</td>
                     <td>{{ doc.upload_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    <td>{{ doc.status }}</td>
+                    <td>{{ doc.staff_status }}</td>
+                    <td>{{ doc.coordinator_status }}</td>
                     <td>
-                        <!-- Approve Button -->
+                        <!-- Approve/Reject Buttons (only if staff_status is Pending) -->
+                        {% if doc.staff_status == 'Pending' %}
                         <form method="POST" action="{{ url_for('verify_document', doc_id=doc.id, action='approve') }}" style="display: inline;">
                             <button type="submit" class="btn btn-success">Approve</button>
                         </form>
-                        <!-- Reject Button -->
                         <form method="POST" action="{{ url_for('verify_document', doc_id=doc.id, action='reject') }}" style="display: inline;">
                             <button type="submit" class="btn btn-danger">Reject</button>
                         </form>
+                        {% else %}
+                        <span>Action taken</span>
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ url_for('uploaded_file', filename=doc.file_name) }}" target="_blank" class="btn btn-primary">Open</a>

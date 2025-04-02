@@ -29,7 +29,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # User Loader
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 # Database Models
 class Message(db.Model):
@@ -89,14 +89,17 @@ class User(db.Model, UserMixin):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+# In app.py, update the Document model
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key for the uploader
-    staff_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key for the assigned staff
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    staff_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     file_name = db.Column(db.String(100), nullable=False)
     file_path = db.Column(db.String(200), nullable=False)
     upload_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(20), default='Pending')
+    # Replace the single status field with two separate ones
+    staff_status = db.Column(db.String(20), default='Pending')  # Staff's decision
+    coordinator_status = db.Column(db.String(20), default='Pending')  # Coordinator's decision
     student_name = db.Column(db.String(50), nullable=False)
     class_name = db.Column(db.String(50), nullable=False)
     abstract = db.Column(db.Text, nullable=False)
@@ -233,25 +236,35 @@ def upload_file():
 @app.route('/staff/verify/<int:doc_id>/<action>', methods=['POST'])
 @login_required
 def verify_document(doc_id, action):
-    if current_user.role not in ['Staff', 'Coordinator']:
+    doc = Document.query.get_or_404(doc_id)
+    
+    if current_user.role == 'Staff':
+        if action == 'approve':
+            doc.staff_status = 'Approved'
+            flash('Document approved by staff successfully!', 'success')
+        elif action == 'reject':
+            doc.staff_status = 'Rejected'
+            flash('Document rejected by staff successfully!', 'success')
+        else:
+            flash('Invalid action.', 'danger')
+            return redirect(url_for('staff_dashboard'))
+            
+    elif current_user.role == 'Coordinator':
+        if action == 'approve':
+            doc.coordinator_status = 'Approved'
+            flash('Document approved by coordinator successfully!', 'success')
+        elif action == 'reject':
+            doc.coordinator_status = 'Rejected'
+            flash('Document rejected by coordinator successfully!', 'success')
+        else:
+            flash('Invalid action.', 'danger')
+            return redirect(url_for('coordinator_dashboard'))
+    else:
         flash('You do not have permission to perform this action.', 'error')
         return redirect(url_for('home'))
 
-    doc = Document.query.get_or_404(doc_id)
-
-    if action == 'approve':
-        doc.status = 'Approved'
-        flash('Document approved successfully!', 'success')
-    elif action == 'reject':
-        doc.status = 'Rejected'
-        flash('Document rejected successfully!', 'success')
-    else:
-        flash('Invalid action.', 'danger')
-        return redirect(url_for('coordinator_dashboard' if current_user.role == 'Coordinator' else 'staff_dashboard'))
-
     db.session.commit()
-    return redirect(url_for('coordinator_dashboard' if current_user.role == 'Coordinator' else 'staff_dashboard'))
-
+    return redirect(url_for('staff_dashboard' if current_user.role == 'Staff' else 'coordinator_dashboard'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

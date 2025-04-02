@@ -22,38 +22,41 @@
         <!-- Uploaded Files Section -->
         <div class="files-section">
             <h2>Your Uploaded Files</h2>
-            <table class="files-table">
-                <thead>
-                    <tr>
-                        <th>File Name</th>
-                        <th>Student Name</th>
-                        <th>Class</th>
-                        <th>Abstract</th>
-                        <th>Group No</th>
-                        <th>Staff Name</th>
-                        <th>Upload Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for doc in documents %}
-                    <tr>
-                        <td>{{ doc.file_name }}</td>
-                        <td>{{ doc.student_name }}</td>
-                        <td>{{ doc.class_name }}</td>
-                        <td>{{ doc.abstract }}</td>
-                        <td>{{ doc.group_no }}</td>
-                        <td>{{ doc.staff_name }}</td>
-                        <td>{{ doc.upload_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td>{{ doc.status }}</td>
-                        <td>
-                            <a href="{{ url_for('uploaded_file', filename=doc.file_name) }}" class="view-button" target="_blank">View File</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <!-- In project.html, update the table columns -->
+        <table class="files-table">
+        <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Student Name</th>
+            <th>Class</th>
+            <th>Abstract</th>
+            <th>Group No</th>
+            <th>Staff Name</th>
+            <th>Upload Date</th>
+            <th>Staff Status</th>
+            <th>Coordinator Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for doc in documents %}
+        <tr>
+            <td>{{ doc.file_name }}</td>
+            <td>{{ doc.student_name }}</td>
+            <td>{{ doc.class_name }}</td>
+            <td>{{ doc.abstract }}</td>
+            <td>{{ doc.group_no }}</td>
+            <td>{{ doc.staff_name }}</td>
+            <td>{{ doc.upload_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ doc.staff_status }}</td>
+            <td>{{ doc.coordinator_status }}</td>
+            <td>
+                <a href="{{ url_for('uploaded_file', filename=doc.file_name) }}" class="view-button" target="_blank">View File</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
         </div>
     </div>
 </div>

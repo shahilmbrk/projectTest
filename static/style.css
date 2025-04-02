@@ -391,9 +391,9 @@ button:hover {
 }
 /* Style for the select dropdown */
 select.form-control {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(189, 189, 189, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff; /* Text color for the selected option */
+  color: #000000; /* Text color for the selected option */
   padding: 8px;
   border-radius: 5px;
   font-size: 16px;
@@ -527,4 +527,101 @@ select.form-control:focus {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
   color: #ffffff;
+}
+
+/* Chat Container - White Background */
+.chat-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chat Box - Light Gray Background */
+#chat-box {
+  background-color: #f8f9fa; /* Light gray */
+  border-radius: 8px;
+  padding: 15px;
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
+
+/* Message Bubbles */
+.message {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.message.sent {
+  background-color: #007bff; /* Blue for sent messages */
+  color: white;
+  margin-left: auto;
+}
+
+.message.received {
+  background-color: #e9ecef; /* Light gray for received */
+  color: #212529; /* Dark text */
+  margin-right: auto;
+}
+
+/* Input Field */
+.message-input {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.message-input input {
+  color: #333; /* Dark text for input */
+  background-color: #fff;
+}
+
+/* Announcement Content - White Background */
+
+
+/* Announcement Items */
+.announcement-item {
+  background-color: #f8f9fa; /* Light gray */
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
+
+.announcement-item h4 {
+  color: #007bff; /* Blue for titles */
+}
+
+.announcement-item p {
+  color: #495057; /* Dark gray for content */
+}
+
+.announcement-item small {
+  color: #6c757d; /* Gray for metadata */
+}
+
+/* Form Styling */
+.post-announcement {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+.post-announcement label {
+  color: #333 !important; /* Dark labels */
+}
+
+.post-announcement input,
+.post-announcement textarea {
+  background-color: #fff !important;
+  color: #333 !important;
+  border: 1px solid #ced4da !important;
 }
